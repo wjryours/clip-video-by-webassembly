@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>clip video by webassembly</title>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+    <script src="./assets/ffmpeg.min.js"></script>
+    <script src="./assets/frontend.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/element-ui@2.15.5/lib/index.js"></script>
+
+</head>
+
+<body>
+    <div class="container">
+        <div class="operate">
+            选择原始视频文件:
+            <input type="file" id="select_origin_file">
+            <button id="start_clip">开始剪辑视频</button>
+            <div class="slider-container">
+                <div id="app">
+                    <template>
+                        <div class="block">
+                            <el-slider v-model="value" range :format-tooltip="formatTooltip" :max="maxSliderValue">
+                            </el-slider>
+                        </div>
+                    </template>
+                </div>
+            </div>
+        </div>
+        <div class="video-container">
+            <div class="label">原视频</div>
+            <video class="my-video" id="origin-video" controls></video>
+        </div>
+        <div class="video-container">
+            <div class="label">处理后的视频</div>
+            <video class="my-video" id="handle-video" controls></video>
+        </div>
+    </div>
+</body>
+<style>
+    @import url("https://cdn.jsdelivr.net/npm/element-ui@2.15.5/lib/theme-chalk/index.css");
+
+    body {
+        margin: 0;
+        padding: 0;
+    }
+
+    .my-video {
+        width: 600px;
+        height: 400px;
+    }
+    .slider-container {
+        padding: 0 16px;
+    }
+</style>
+<script>
+
+</script>
+
+</html>

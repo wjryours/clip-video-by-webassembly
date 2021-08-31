@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>最小功能实现</title>
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+  <script src="./assets/ffmpeg.min.js"></script>
+</head>
+
+<body>
+  <div class="container">
+    <div class="operate">
+      选择原始视频文件:
+      <input type="file" id="select_origin_file">
+      <button id="start_clip">开始剪辑视频</button>
+    </div>
+    <div class="video-container">
+      <div class="label">原视频</div>
+      <video class="my-video" id="origin-video" controls></video>
+    </div>
+    <div class="video-container">
+      <div class="label">处理后的视频</div>
+      <video class="my-video" id="handle-video" controls></video>
+    </div>
+  </div>
+  <script>
+    let originFile
+    $(document).ready(function () {
+      $('#select_origin_file').on('change', (e) => {
+        const file = e.target.files[0]
+        originFile = file
+        const url = window.webkitURL.createObjectURL(file)
+        $('#origin-video').attr('src', url)
+
+      })
+      $('#start_clip').on('click', async function () {
+        const { fetchFile, createFFmpeg } = FFmpeg;
+        ffmpeg = createFFmpeg({
+          log: true,
+          corePath: './assets/ffmpeg-core.js',
+        });
+        const file = originFile
+        const { name } = file;
+        if (!ffmpeg.isLoaded()) {
+          await ffmpeg.load();
+        }
+        ffmpeg.FS('writeFile', name, await fetchFile(file));
+        await ffmpeg.run('-i', name, '-ss', '00:00:00', '-to', '00:00:01', 'output.mp4');
+        const data = ffmpeg.FS('readFile', 'output.mp4');
+        const tempURL = URL.createObjectURL(new Blob([data.buffer], { type: 'video/mp4' }));
+        $('#handle-video').attr('src', tempURL)
+      })
+    });
+  </script>
+</body>
+
+</html>

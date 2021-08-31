@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>test WebAssembly func</title>
+</head>
+
+<body>
+  <script>
+    fetch('./test.wasm').then(response =>
+      response.arrayBuffer()
+    ).then(bytes =>
+      WebAssembly.instantiate(bytes)
+    ).then(results => {
+      const add = results.instance.exports.add
+      console.log(add(11,33))
+    });
+  </script>
+</body>
+
+</html>
